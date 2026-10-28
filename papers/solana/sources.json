@@ -1,0 +1,178 @@
+{
+  "title": "Solana 新币开盘首买与最优竞价策略",
+  "version": "2.0",
+  "paper_date_asia_shanghai": "2026-10-29",
+  "evidence_type": "official mechanism synthesis; exploratory chain case; untested parameter proposal",
+  "mainnet_benchmark_executed": false,
+  "mainnet_read_only_case_executed": true,
+  "target_first_buy_probability": null,
+  "empirical_optimum_established": false,
+  "example_profile": {
+    "format": "legacy/v0",
+    "cu_limit": 200000,
+    "priority_fee_sol": "0.01",
+    "cu_price_micro_lamports": 50000000,
+    "tip_sol": "0.1",
+    "high_budget_tip_sol": "50",
+    "period_ms": 25,
+    "sender_standard_quota_required": true,
+    "timing_inputs_are_hypothetical": true,
+    "earliest_scheduled_offset_ms": -35,
+    "independent_landed_attempt_cap": 20
+  },
+  "sources": [
+    {
+      "id": 1,
+      "organization": "Solana Foundation",
+      "title": "Fee Structure",
+      "url": "https://solana.com/docs/core/fees/fee-structure",
+      "supports": "原生费用、按请求 CU 收取优先费、v1 费用配置差异。",
+      "access_date_asia_shanghai": "2026-10-29"
+    },
+    {
+      "id": 2,
+      "organization": "Solana Foundation",
+      "title": "Compute Budget",
+      "url": "https://solana.com/docs/core/fees/compute-budget",
+      "supports": "CU 上限、成功路径模拟和约 10% 余量。",
+      "access_date_asia_shanghai": "2026-10-29"
+    },
+    {
+      "id": 3,
+      "organization": "Jito Labs",
+      "title": "Low Latency Transaction Send",
+      "url": "https://docs.jito.wtf/lowlatencytxnsend/",
+      "supports": "传统竞价、tip 账户、原子 bundle、限流与失败保护边界。",
+      "access_date_asia_shanghai": "2026-10-29"
+    },
+    {
+      "id": 4,
+      "organization": "BAM Team",
+      "title": "Introducing: BAM's Direct Bundle Ingest",
+      "url": "https://bam.dev/blog/introducing-bams-direct-bundle-ingest/",
+      "supports": "2026-10-13 公告；DBI 的费用/CU 竞价、直接提交与白名单。",
+      "access_date_asia_shanghai": "2026-10-29"
+    },
+    {
+      "id": 5,
+      "organization": "Helius",
+      "title": "Sender Max",
+      "url": "https://www.helius.dev/docs/sending-transactions/sender-max",
+      "supports": "多路径发送、Sender tip、优先费要求和下游 tip 处理。",
+      "access_date_asia_shanghai": "2026-10-29"
+    },
+    {
+      "id": 6,
+      "organization": "Helius",
+      "title": "Priority Fee API",
+      "url": "https://www.helius.dev/docs/priority-fee-api",
+      "supports": "账户定向估算；VeryHigh 是含余量的尾部报价，非成功率。",
+      "access_date_asia_shanghai": "2026-10-29"
+    },
+    {
+      "id": 7,
+      "organization": "Helius",
+      "title": "Documentation Index: Preconfirmations",
+      "url": "https://www.helius.dev/docs/llms.txt",
+      "supports": "区分 Helius 执行后信号与 BAM 承诺执行信号；覆盖和消息去重。",
+      "access_date_asia_shanghai": "2026-10-29"
+    },
+    {
+      "id": 8,
+      "organization": "Pump",
+      "title": "Bonding Curve Trades V3",
+      "url": "https://github.com/pump-fun/pump-public-docs/blob/main/docs/instructions/TRADE_V3.md",
+      "supports": "直接曲线买入接口、账户要求和最高支出/最低输出限制。",
+      "access_date_asia_shanghai": "2026-10-29"
+    },
+    {
+      "id": 9,
+      "organization": "Solana Foundation",
+      "title": "Transactions",
+      "url": "https://solana.com/docs/core/transactions",
+      "supports": "同笔交易指令的原子性及失败仍收费。",
+      "access_date_asia_shanghai": "2026-10-29"
+    },
+    {
+      "id": 10,
+      "organization": "BAM Team",
+      "title": "BAM Changelog: Sept 23-Oct 9",
+      "url": "https://bam.dev/blog/bam-changelog-sept-23-oct-9/",
+      "supports": "2026-10-09 公告；升级维护回退，DBI 与 MPP 暂停安排。",
+      "access_date_asia_shanghai": "2026-10-29"
+    },
+    {
+      "id": 11,
+      "organization": "Solana Foundation",
+      "title": "Alpenglow",
+      "url": "https://solana.com/upgrades/alpenglow",
+      "supports": "当日官网标注主网上线、200ms slot 与终局性目标；流的 bank 标识、跨源合并和承诺级别变化。",
+      "access_date_asia_shanghai": "2026-10-29"
+    },
+    {
+      "id": 12,
+      "organization": "Ethereum.org",
+      "title": "Gas and Fees",
+      "url": "https://ethereum.org/developers/docs/gas/",
+      "supports": "以太坊常规 gas 费按计费 gasUsed 结算，失败也会收费。",
+      "access_date_asia_shanghai": "2026-10-29"
+    },
+    {
+      "id": 13,
+      "organization": "BAM Team",
+      "title": "Preconfirmations",
+      "url": "https://bam.dev/docs/bam/preconfirmations/",
+      "supports": "BAM 信号来自执行承诺，非执行结果或最终确认；覆盖范围取决于参与 leader。",
+      "access_date_asia_shanghai": "2026-10-29"
+    },
+    {
+      "id": 14,
+      "organization": "Meteora",
+      "title": "What is Alpha Vault?",
+      "url": "https://docs.meteora.ag/helper-products/alpha-vault/what-is-alpha-vault",
+      "supports": "受保护的公开开盘前买入窗口；公开首买与全历史首买的区别。",
+      "access_date_asia_shanghai": "2026-10-29"
+    },
+    {
+      "id": 15,
+      "organization": "Helius",
+      "title": "Sender Overview",
+      "url": "https://www.helius.dev/docs/sending-transactions/sender",
+      "supports": "带项目 key 的标准每区域 50 TPS，免 key 每秒 1 次；实际额度以账户为准。",
+      "access_date_asia_shanghai": "2026-10-29"
+    },
+    {
+      "id": 16,
+      "organization": "Pump",
+      "title": "Official Pump IDL",
+      "url": "https://raw.githubusercontent.com/pump-fun/pump-public-docs/main/idl/pump.json",
+      "supports": "按程序 ID、指令 discriminator 和账户解析 create_v2、buy 等指令。",
+      "access_date_asia_shanghai": "2026-10-29"
+    },
+    {
+      "id": 17,
+      "organization": "Solana Foundation",
+      "title": "getBlock RPC",
+      "url": "https://solana.com/docs/rpc/http/getblock",
+      "supports": "读取 finalized 完整区块、签名、费用和指令；案例另附原始读数校验清单。",
+      "access_date_asia_shanghai": "2026-10-29"
+    }
+  ],
+  "artifacts": [
+    {
+      "name": "Solana新币开盘首买与最优竞价策略_案例与参数版_20261029.pdf",
+      "bytes": 476087,
+      "sha256": "9be6ccdc1276f2f734d65e4ceae2a5dff18f7ef0b7bf484cf02e94656c8b4764"
+    },
+    {
+      "name": "Solana新币开盘首买与最优竞价策略_案例与参数版_20261029.txt",
+      "bytes": 26930,
+      "sha256": "cbe02eeb998e2e08a4d21cf1b96718dec42a2829c915d746c5d37d9031c37d22"
+    },
+    {
+      "name": "Solana新币开盘首买与最优竞价策略_案例与参数版_20261029.md",
+      "bytes": 26969,
+      "sha256": "764fd2504f1949a9346ade2efdb41a663accd88d2e840b3bb1215486aa8e665e"
+    }
+  ]
+}
