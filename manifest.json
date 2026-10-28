@@ -1,0 +1,35 @@
+{
+  "title": "热门区块链的最优竞价策略",
+  "repository_name": "optimal-bidding-strategies-for-popular-blockchains",
+  "paper_revision": "2026-10-29",
+  "pdf_pages": 4,
+  "reference_count": 13,
+  "empirical_optimum_established": false,
+  "files": [
+    {
+      "path": "papers/base/base-launch-sniping-concise.md",
+      "bytes": 9675,
+      "sha256": "085f9cb20a58a340dfe3b9c8ec3f02d43719ea461ac45761e48fb38e5278fdda"
+    },
+    {
+      "path": "papers/base/base-launch-sniping-concise.pdf",
+      "bytes": 289722,
+      "sha256": "576cd131361a46903c66d1ab5e13d813fa752bba1fb01c18676e9fc63b406f14"
+    },
+    {
+      "path": "papers/base/base-launch-sniping-concise.txt",
+      "bytes": 9543,
+      "sha256": "06ad385caebce2a112be13817fbee7f40e7701314825f5382947d6a06852d6f1"
+    },
+    {
+      "path": "papers/base/sources.json",
+      "bytes": 2318,
+      "sha256": "b57cee87670066bb4c8b74517408e6c31ca531f64f89825d5506db1e94fafce4"
+    },
+    {
+      "path": "README.md",
+      "bytes": 1763,
+      "sha256": "0294f045f5708a2acf3ed4b00b1bebc3682b276b873892dabdbf956f9304a84b"
+    }
+  ]
+}
