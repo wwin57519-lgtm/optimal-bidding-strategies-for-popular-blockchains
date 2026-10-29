@@ -1,6 +1,6 @@
 {
-  "version": "2.0",
-  "pages": 12,
+  "version": "2.1",
+  "pages": 13,
   "reference_count": 17,
   "clickable_links": 21,
   "content_and_bounds_checks": "passed",
@@ -10,14 +10,14 @@
   "mainnet_read_only_case_executed": true,
   "mainnet_benchmark_executed": false,
   "empirical_optimum_established": false,
-  "manual_visual_review": "passed; all 12 rendered pages inspected",
-  "pdf_sha256": "9be6ccdc1276f2f734d65e4ceae2a5dff18f7ef0b7bf484cf02e94656c8b4764",
-  "text_sha256": "cbe02eeb998e2e08a4d21cf1b96718dec42a2829c915d746c5d37d9031c37d22",
-  "markdown_sha256": "764fd2504f1949a9346ade2efdb41a663accd88d2e840b3bb1215486aa8e665e",
+  "manual_visual_review": "passed; all 13 final rendered pages inspected",
+  "pdf_sha256": "99eccc4247be0239eaafbc693be662679873fdffb112fd2a8644abb0956750cb",
+  "text_sha256": "02c407abbe82f5b65841d84eb8406f97a1bc69ade2e5ca94c7e3ff7aec5e45d5",
+  "markdown_sha256": "a762d2506c8c1848919105defb051e2dca8d13fe8c05d670284fa5e671dd2d28",
   "page_details": [
     {
       "page": 1,
-      "characters": 917,
+      "characters": 918,
       "body_bottom": 636.3595218
     },
     {
@@ -57,21 +57,26 @@
     },
     {
       "page": 9,
-      "characters": 1161,
-      "body_bottom": 544.0355472000001
+      "characters": 1028,
+      "body_bottom": 640.9355472
     },
     {
       "page": 10,
+      "characters": 1162,
+      "body_bottom": 544.0355472000001
+    },
+    {
+      "page": 11,
       "characters": 904,
       "body_bottom": 586.5595218000001
     },
     {
-      "page": 11,
+      "page": 12,
       "characters": 1208,
       "body_bottom": 433.2300784
     },
     {
-      "page": 12,
+      "page": 13,
       "characters": 1184,
       "body_bottom": 429.83007840000005
     }

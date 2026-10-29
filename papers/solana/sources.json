@@ -1,6 +1,6 @@
 {
   "title": "Solana 新币开盘首买与最优竞价策略",
-  "version": "2.0",
+  "version": "2.1",
   "paper_date_asia_shanghai": "2026-10-29",
   "evidence_type": "official mechanism synthesis; exploratory chain case; untested parameter proposal",
   "mainnet_benchmark_executed": false,
@@ -161,18 +161,18 @@
   "artifacts": [
     {
       "name": "Solana新币开盘首买与最优竞价策略_案例与参数版_20261029.pdf",
-      "bytes": 476087,
-      "sha256": "9be6ccdc1276f2f734d65e4ceae2a5dff18f7ef0b7bf484cf02e94656c8b4764"
+      "bytes": 491689,
+      "sha256": "99eccc4247be0239eaafbc693be662679873fdffb112fd2a8644abb0956750cb"
     },
     {
       "name": "Solana新币开盘首买与最优竞价策略_案例与参数版_20261029.txt",
-      "bytes": 26930,
-      "sha256": "cbe02eeb998e2e08a4d21cf1b96718dec42a2829c915d746c5d37d9031c37d22"
+      "bytes": 29525,
+      "sha256": "02c407abbe82f5b65841d84eb8406f97a1bc69ade2e5ca94c7e3ff7aec5e45d5"
     },
     {
       "name": "Solana新币开盘首买与最优竞价策略_案例与参数版_20261029.md",
-      "bytes": 26969,
-      "sha256": "764fd2504f1949a9346ade2efdb41a663accd88d2e840b3bb1215486aa8e665e"
+      "bytes": 29564,
+      "sha256": "a762d2506c8c1848919105defb051e2dca8d13fe8c05d670284fa5e671dd2d28"
     }
   ]
 }

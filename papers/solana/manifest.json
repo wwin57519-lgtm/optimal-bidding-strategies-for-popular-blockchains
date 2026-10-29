@@ -1,8 +1,8 @@
 {
   "title": "Solana 新币开盘首买与最优竞价策略",
-  "version": "2.0",
+  "version": "2.1",
   "revision_date": "2026-10-29",
-  "pdf_pages": 12,
+  "pdf_pages": 13,
   "reference_count": 17,
   "empirical_optimum_established": false,
   "mainnet_read_only_case_executed": true,
@@ -14,33 +14,33 @@
     },
     {
       "path": "qa.json",
-      "bytes": 1976,
-      "sha256": "36c33b182c89b0c7c342e678fe2095d799b2fdd7317c1b6b9581f86b9dd97e8e"
+      "bytes": 2077,
+      "sha256": "36290b8ea066743e4088984175b163971b353fa34961c13594b0e6739d153919"
     },
     {
       "path": "README.md",
-      "bytes": 1845,
-      "sha256": "2da07cc829f87f8a40090df358a70d0de5fb6b03066a9b4145f4321a6c7ffa07"
+      "bytes": 1864,
+      "sha256": "39386cc09dbb3499a4a17516c8c93d5db625f62a0ea95bdcc985f29d98659fca"
     },
     {
       "path": "solana-launch-first-buy-v2.md",
-      "bytes": 26969,
-      "sha256": "764fd2504f1949a9346ade2efdb41a663accd88d2e840b3bb1215486aa8e665e"
+      "bytes": 29564,
+      "sha256": "a762d2506c8c1848919105defb051e2dca8d13fe8c05d670284fa5e671dd2d28"
     },
     {
       "path": "solana-launch-first-buy-v2.pdf",
-      "bytes": 476087,
-      "sha256": "9be6ccdc1276f2f734d65e4ceae2a5dff18f7ef0b7bf484cf02e94656c8b4764"
+      "bytes": 491689,
+      "sha256": "99eccc4247be0239eaafbc693be662679873fdffb112fd2a8644abb0956750cb"
     },
     {
       "path": "solana-launch-first-buy-v2.txt",
-      "bytes": 26930,
-      "sha256": "cbe02eeb998e2e08a4d21cf1b96718dec42a2829c915d746c5d37d9031c37d22"
+      "bytes": 29525,
+      "sha256": "02c407abbe82f5b65841d84eb8406f97a1bc69ade2e5ca94c7e3ff7aec5e45d5"
     },
     {
       "path": "sources.json",
       "bytes": 7078,
-      "sha256": "486b2af6f56b828c76a965c30932dcb66fa83643a60d9629d5df6b96c8766735"
+      "sha256": "d8732c2d21546505cd2f6ae71b4128d228bda3378c8ea3d5b762b1c4c8468736"
     }
   ]
 }

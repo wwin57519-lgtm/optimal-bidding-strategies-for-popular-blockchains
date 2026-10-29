@@ -1,6 +1,6 @@
 # Read-only reproduction / 只读复核
 
-修订：2026-10-29。全文见 [论文](solana-launch-first-buy-v2.md)，排版见 [PDF](solana-launch-first-buy-v2.pdf)。
+修订：2026-10-29，v2.1（13 页）。全文见 [论文](solana-launch-first-buy-v2.md)，排版见 [PDF](solana-launch-first-buy-v2.pdf)。
 
 本案例不能用来证明排除项目方后的外部首买胜率：第一笔买入与创建者使用同一 user / fee payer，跨交易 bundle 归属未知。发送时刻与频率无法由区块读数反推。数值参数属于未实测的起测配置。
 
