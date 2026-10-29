@@ -25,24 +25,49 @@
       "sha256": "b57cee87670066bb4c8b74517408e6c31ca531f64f89825d5506db1e94fafce4"
     },
     {
+      "path": "README.md",
+      "bytes": 3724,
+      "sha256": "27327f104ae4350f9fb448bf8340b09a016c6c6156cf91ba2a3b5b1b1b62f6de"
+    },
+    {
       "path": "papers/solana/case-evidence.json",
       "bytes": 178368,
       "sha256": "df677892f77ecb7db3dba68a223f841f329aca76c07c5a8dec5f8190673e348f"
     },
     {
-      "path": "papers/solana/manifest.json",
-      "bytes": 1393,
-      "sha256": "6dca38f24fa13d250f81fd72cd057a12206c40cd799fb1fa3b7d46553e6fe952"
+      "path": "papers/solana/case-payments-v3.json",
+      "bytes": 90281,
+      "sha256": "11d3bb0858c1eee61e9a8e5d49dde49b962e8fa2807e01b7c303f2742c0872a0"
     },
     {
-      "path": "papers/solana/qa.json",
+      "path": "papers/solana/manifest-v2.json",
+      "bytes": 1503,
+      "sha256": "f2fbf9ba903be27d93df396929d6a672c91e115ada197b35d8df3ec57e7b525e"
+    },
+    {
+      "path": "papers/solana/manifest.json",
+      "bytes": 2671,
+      "sha256": "08cd77f2a06af3d1f3be6f93c1dad03f33d94812934b745b0cc7f4b934340a05"
+    },
+    {
+      "path": "papers/solana/qa-v2.json",
       "bytes": 2077,
       "sha256": "36290b8ea066743e4088984175b163971b353fa34961c13594b0e6739d153919"
     },
     {
-      "path": "papers/solana/README.md",
+      "path": "papers/solana/qa.json",
+      "bytes": 1881,
+      "sha256": "8d3de43a966b113f0957954a0ef1ca442d72ac570cd42b36178035823fd1ad11"
+    },
+    {
+      "path": "papers/solana/README-v2.md",
       "bytes": 1864,
       "sha256": "39386cc09dbb3499a4a17516c8c93d5db625f62a0ea95bdcc985f29d98659fca"
+    },
+    {
+      "path": "papers/solana/README.md",
+      "bytes": 2247,
+      "sha256": "8ae8f9883099c61c206a4462673aea1617f522ec3ea6892ef67e7f805000c70c"
     },
     {
       "path": "papers/solana/solana-launch-first-buy-v2.md",
@@ -60,14 +85,29 @@
       "sha256": "02c407abbe82f5b65841d84eb8406f97a1bc69ade2e5ca94c7e3ff7aec5e45d5"
     },
     {
-      "path": "papers/solana/sources.json",
+      "path": "papers/solana/solana-launch-first-buy-v3.md",
+      "bytes": 17405,
+      "sha256": "710dd51e364624838d2bfec9b4552a5de6e42bef1dc5bc092f11e865ca5dffc5"
+    },
+    {
+      "path": "papers/solana/solana-launch-first-buy-v3.pdf",
+      "bytes": 395395,
+      "sha256": "354f9266217229a78744e804570391f428c54937162932918d790bc54237f0dc"
+    },
+    {
+      "path": "papers/solana/solana-launch-first-buy-v3.txt",
+      "bytes": 17366,
+      "sha256": "f4b864cf4facc1e4b1d978b767e9fc049c67e99e0f539db87c32694fae12b451"
+    },
+    {
+      "path": "papers/solana/sources-v2.json",
       "bytes": 7078,
       "sha256": "d8732c2d21546505cd2f6ae71b4128d228bda3378c8ea3d5b762b1c4c8468736"
     },
     {
-      "path": "README.md",
-      "bytes": 2861,
-      "sha256": "14da23e8cce34bce2a1fba28f283f33644d90e48b8f14b129d56a248b2e82dfe"
+      "path": "papers/solana/sources.json",
+      "bytes": 6630,
+      "sha256": "eb18ea2cfeb41e9a2285ceb2746f53a04566c9587b6ec511947ccff58c866dd2"
     }
   ],
   "papers": [
@@ -79,10 +119,10 @@
     },
     {
       "chain": "Solana",
-      "version": "2.1",
+      "version": "3.0",
       "revision_date": "2026-10-29",
-      "pdf_pages": 13,
-      "reference_count": 17,
+      "pdf_pages": 8,
+      "reference_count": 18,
       "manifest": "papers/solana/manifest.json",
       "empirical_optimum_established": false
     }
