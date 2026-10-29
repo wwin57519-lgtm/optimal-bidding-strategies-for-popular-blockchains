@@ -2,8 +2,6 @@
   "title": "热门区块链的最优竞价策略",
   "repository_name": "optimal-bidding-strategies-for-popular-blockchains",
   "paper_revision": "2026-10-29",
-  "pdf_pages": 4,
-  "reference_count": 13,
   "empirical_optimum_established": false,
   "files": [
     {
@@ -27,9 +25,66 @@
       "sha256": "b57cee87670066bb4c8b74517408e6c31ca531f64f89825d5506db1e94fafce4"
     },
     {
+      "path": "papers/solana/case-evidence.json",
+      "bytes": 178368,
+      "sha256": "df677892f77ecb7db3dba68a223f841f329aca76c07c5a8dec5f8190673e348f"
+    },
+    {
+      "path": "papers/solana/manifest.json",
+      "bytes": 1393,
+      "sha256": "6dca38f24fa13d250f81fd72cd057a12206c40cd799fb1fa3b7d46553e6fe952"
+    },
+    {
+      "path": "papers/solana/qa.json",
+      "bytes": 2077,
+      "sha256": "36290b8ea066743e4088984175b163971b353fa34961c13594b0e6739d153919"
+    },
+    {
+      "path": "papers/solana/README.md",
+      "bytes": 1864,
+      "sha256": "39386cc09dbb3499a4a17516c8c93d5db625f62a0ea95bdcc985f29d98659fca"
+    },
+    {
+      "path": "papers/solana/solana-launch-first-buy-v2.md",
+      "bytes": 29564,
+      "sha256": "a762d2506c8c1848919105defb051e2dca8d13fe8c05d670284fa5e671dd2d28"
+    },
+    {
+      "path": "papers/solana/solana-launch-first-buy-v2.pdf",
+      "bytes": 491689,
+      "sha256": "99eccc4247be0239eaafbc693be662679873fdffb112fd2a8644abb0956750cb"
+    },
+    {
+      "path": "papers/solana/solana-launch-first-buy-v2.txt",
+      "bytes": 29525,
+      "sha256": "02c407abbe82f5b65841d84eb8406f97a1bc69ade2e5ca94c7e3ff7aec5e45d5"
+    },
+    {
+      "path": "papers/solana/sources.json",
+      "bytes": 7078,
+      "sha256": "d8732c2d21546505cd2f6ae71b4128d228bda3378c8ea3d5b762b1c4c8468736"
+    },
+    {
       "path": "README.md",
-      "bytes": 1763,
-      "sha256": "0294f045f5708a2acf3ed4b00b1bebc3682b276b873892dabdbf956f9304a84b"
+      "bytes": 2861,
+      "sha256": "14da23e8cce34bce2a1fba28f283f33644d90e48b8f14b129d56a248b2e82dfe"
+    }
+  ],
+  "papers": [
+    {
+      "chain": "Base",
+      "revision_date": "2026-10-29",
+      "pdf_pages": 4,
+      "reference_count": 13
+    },
+    {
+      "chain": "Solana",
+      "version": "2.1",
+      "revision_date": "2026-10-29",
+      "pdf_pages": 13,
+      "reference_count": 17,
+      "manifest": "papers/solana/manifest.json",
+      "empirical_optimum_established": false
     }
   ]
 }
