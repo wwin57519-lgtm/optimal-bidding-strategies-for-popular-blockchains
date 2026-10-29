@@ -1,0 +1,114 @@
+{
+  "recorded_at_utc": "2026-10-29T00:28:57.735601+00:00",
+  "method": "5 sequential latest-header reads per endpoint; read-only",
+  "transaction_submission_tested": false,
+  "paid_or_private_rpc_tested": false,
+  "results": [
+    {
+      "endpoint": "https://mainnet.base.org",
+      "chain_id": 8453,
+      "successful_head_reads": 5,
+      "head_reads": [
+        {
+          "elapsed_ms": 1043.45,
+          "number": 53222191,
+          "timestamp": 1793233729,
+          "base_fee_wei": 5007528,
+          "gas_limit": 400000000
+        },
+        {
+          "elapsed_ms": 1025.54,
+          "number": 53222192,
+          "timestamp": 1793233731,
+          "base_fee_wei": 5000000,
+          "gas_limit": 400000000
+        },
+        {
+          "elapsed_ms": 982.12,
+          "number": 53222192,
+          "timestamp": 1793233731,
+          "base_fee_wei": 5000000,
+          "gas_limit": 400000000
+        },
+        {
+          "elapsed_ms": 1202.2,
+          "number": 53222192,
+          "timestamp": 1793233731,
+          "base_fee_wei": 5000000,
+          "gas_limit": 400000000
+        },
+        {
+          "elapsed_ms": 996.98,
+          "number": 53222193,
+          "timestamp": 1793233733,
+          "base_fee_wei": 5000000,
+          "gas_limit": 400000000
+        }
+      ],
+      "median_ms": 1025.54,
+      "max_ms": 1202.2
+    },
+    {
+      "endpoint": "https://base-rpc.publicnode.com",
+      "chain_id": 8453,
+      "successful_head_reads": 5,
+      "head_reads": [
+        {
+          "elapsed_ms": 850.74,
+          "number": 53222191,
+          "timestamp": 1793233729,
+          "base_fee_wei": 5007528,
+          "gas_limit": 400000000
+        },
+        {
+          "elapsed_ms": 895.97,
+          "number": 53222191,
+          "timestamp": 1793233729,
+          "base_fee_wei": 5007528,
+          "gas_limit": 400000000
+        },
+        {
+          "elapsed_ms": 836.44,
+          "number": 53222192,
+          "timestamp": 1793233731,
+          "base_fee_wei": 5000000,
+          "gas_limit": 400000000
+        },
+        {
+          "elapsed_ms": 888.58,
+          "number": 53222192,
+          "timestamp": 1793233731,
+          "base_fee_wei": 5000000,
+          "gas_limit": 400000000
+        },
+        {
+          "elapsed_ms": 864.32,
+          "number": 53222193,
+          "timestamp": 1793233733,
+          "base_fee_wei": 5000000,
+          "gas_limit": 400000000
+        }
+      ],
+      "median_ms": 864.32,
+      "max_ms": 895.97
+    }
+  ],
+  "historical_pool_liquidity": [
+    {
+      "block": 51083008,
+      "liquidity": 0,
+      "ok": true
+    },
+    {
+      "block": 51083009,
+      "liquidity": 39770160585617423,
+      "ok": true
+    }
+  ],
+  "limitations": [
+    "small sample from this workstation",
+    "no controlled server region",
+    "read RTT is not sequencer arrival latency",
+    "no throughput or first-buy ranking measured"
+  ]
+}

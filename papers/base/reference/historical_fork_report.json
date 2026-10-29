@@ -1,0 +1,6 @@
+{
+  "status": "not_validated",
+  "error": "liquidity replay failed",
+  "scope": "local archive-fork attempt only",
+  "live_submission": false
+}

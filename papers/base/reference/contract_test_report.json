@@ -1,0 +1,83 @@
+{
+  "status": "passed",
+  "compiler": "0.8.30+commit.73712a01.Emscripten.clang",
+  "chain_id": 8453,
+  "environment": "local in-memory Ganache with mock token and pool; not Base mainnet or historical fork",
+  "tests": [
+    {
+      "name": "zero liquidity reverts without buying",
+      "status": "passed"
+    },
+    {
+      "name": "included reverted attempt consumes its EOA nonce",
+      "status": "passed"
+    },
+    {
+      "name": "unauthorized trigger rejected",
+      "status": "passed"
+    },
+    {
+      "name": "forged callback rejected",
+      "status": "passed"
+    },
+    {
+      "name": "insufficient output rolls back balances and success flag",
+      "status": "passed"
+    },
+    {
+      "name": "actual recipient balance detects output transfer tax",
+      "status": "passed"
+    },
+    {
+      "name": "partial exact-input payment rejected atomically",
+      "status": "passed"
+    },
+    {
+      "name": "successful purchase pays exactly once and reaches fixed recipient",
+      "status": "passed"
+    },
+    {
+      "name": "second wallet cannot purchase again",
+      "status": "passed"
+    },
+    {
+      "name": "owner cancellation stops subsequent attempts",
+      "status": "passed"
+    },
+    {
+      "name": "keeper cannot withdraw contract funds",
+      "status": "passed"
+    },
+    {
+      "name": "constructor rejects wrong factory",
+      "status": "passed"
+    },
+    {
+      "name": "50 wallet triggers result in exactly one successful shared purchase",
+      "status": "passed"
+    },
+    {
+      "name": "expired window rejects purchase",
+      "status": "passed"
+    }
+  ],
+  "gas_used_mock_only": {
+    "before_open": 31193,
+    "min_output_revert": 151316,
+    "success": 148195,
+    "after_success": 23580
+  },
+  "multi_wallet_lock": {
+    "triggers": 50,
+    "successes": 1,
+    "reverted": 49,
+    "meaning": "one-success state invariant only; not a sequencing benchmark"
+  },
+  "runtime_bytes": 3193,
+  "claims_not_validated": [
+    "historical pool compatibility",
+    "pre-82 successful swap gas",
+    "live inclusion latency",
+    "first-buy win rate"
+  ]
+}
