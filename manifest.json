@@ -21,18 +21,18 @@
     },
     {
       "path": "papers/base/base-launch-sniping-parameters.md",
-      "bytes": 14540,
-      "sha256": "e6d6d3a4beccadb382205938e66ae061e3b701ebe571d7ea1aba50594faf8110"
+      "bytes": 14717,
+      "sha256": "425fe301346be63449273ba55c037f7565d816883388f47ed832b222dc0d85e0"
     },
     {
       "path": "papers/base/base-launch-sniping-parameters.pdf",
-      "bytes": 338632,
-      "sha256": "a57d292d77dd821e0f4bd5b51d9bda90d3a0e5313215c20731e6a2bc72d85637"
+      "bytes": 339169,
+      "sha256": "289dc981275fce17921564d30d094ee127855b9f4c86c40d87867a89c122afbb"
     },
     {
       "path": "papers/base/base-launch-sniping-parameters.txt",
-      "bytes": 14129,
-      "sha256": "8e41653e01beab56c08af5aae7c78423daab561114433b026fdb4a2e875ffc52"
+      "bytes": 14310,
+      "sha256": "a182b9976985ae0baeeb41a06f7f4255ec70e8e4c7fb2536927e357973bf63fe"
     },
     {
       "path": "papers/base/reference/contract_test_report.json",
@@ -61,8 +61,8 @@
     },
     {
       "path": "papers/base/reference/README.md",
-      "bytes": 1625,
-      "sha256": "a32078bf5bcbd7cc492dd421d5ba08411d1833c8ed97e6d715f6ef8106fdd0ba"
+      "bytes": 1898,
+      "sha256": "1daecffda76adf1bb5560774612a65dc33fc358c026213611ba4760f329200e4"
     },
     {
       "path": "papers/base/reference/rpc_read_probe.json",
@@ -76,8 +76,8 @@
     },
     {
       "path": "papers/base/reference_profile.json",
-      "bytes": 3901,
-      "sha256": "8cc26dd07de11dc2c7425649b3bfbc66a3e76888d6e4f1429177d456c7c14e40"
+      "bytes": 4873,
+      "sha256": "4be146989db4894c39f388c69e2b7b771114cff75989e36b5adf83cf2c549b97"
     },
     {
       "path": "papers/base/sources.json",
@@ -166,8 +166,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 3748,
-      "sha256": "9c46c917400c9c7a8df15561b0e994a16965a6f95caa1660ad35604601f5eb0c"
+      "bytes": 3861,
+      "sha256": "84a5a974d9189a12d24123407e67f0700b77f236e7fa631be4c10bff5a8bb134"
     }
   ],
   "papers": [
@@ -201,5 +201,13 @@
   ],
   "local_contract_tests_passed": 14,
   "historical_success_fork_validated": false,
-  "live_submission_tested": false
+  "live_submission_tested": false,
+  "base_nonce_policy": {
+    "startup_calibration": true,
+    "local_monotonic_allocation": true,
+    "asynchronous_reconciliation": true,
+    "query_before_each_submission": false,
+    "fixed_inflight_count_limit": null,
+    "scheduler_runtime_implemented": false
+  }
 }

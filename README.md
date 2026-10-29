@@ -12,7 +12,7 @@
 - [机器可读配置](papers/base/reference_profile.json)
 - [参考合约与本地测试](papers/base/reference/README.md)
 
-给出 gasLimit、动态 Max Fee、Max Priority、50 钱包发送节奏、nonce 状态管理和 RPC 主备结构。14 项本地合约测试通过；50 个模拟钱包触发后恰好 1 笔成功。历史成功路径分叉未通过，因此这些参数仍是研究起点，不能称为已验证的主网最优。
+给出 gasLimit、动态 Max Fee、Max Priority、50 钱包发送节奏和 RPC 主备结构。nonce 采用启动时校准、发送时本地递增、后台异步对账；不逐笔查询 RPC，不固定限制在途笔数。既有 14 项本地合约测试通过；50 个模拟钱包触发后恰好 1 笔成功。历史成功路径分叉未通过，因此这些参数仍是研究起点，不能称为已验证的主网最优。
 
 ### Solana：新币首买最优竞价策略（v3.0 执行与案例版）
 
