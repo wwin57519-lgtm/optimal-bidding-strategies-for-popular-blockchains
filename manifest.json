@@ -41,8 +41,8 @@
     },
     {
       "path": "papers/base/reference/evm/package.json",
-      "bytes": 100,
-      "sha256": "e64a014a3e8795372bdf3f9a32a89d1b135ba9755b876f35ecacbe1f875537d5"
+      "bytes": 97,
+      "sha256": "5ef45dd65aec73426bb1495984278943bd944f03b2677e2e35478547f14d1070"
     },
     {
       "path": "papers/base/reference/FixedPoolLaunchBuyer.sol",
