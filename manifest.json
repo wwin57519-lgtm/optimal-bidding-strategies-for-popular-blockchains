@@ -20,14 +20,69 @@
       "sha256": "06ad385caebce2a112be13817fbee7f40e7701314825f5382947d6a06852d6f1"
     },
     {
+      "path": "papers/base/base-launch-sniping-parameters.md",
+      "bytes": 14540,
+      "sha256": "e6d6d3a4beccadb382205938e66ae061e3b701ebe571d7ea1aba50594faf8110"
+    },
+    {
+      "path": "papers/base/base-launch-sniping-parameters.pdf",
+      "bytes": 338632,
+      "sha256": "a57d292d77dd821e0f4bd5b51d9bda90d3a0e5313215c20731e6a2bc72d85637"
+    },
+    {
+      "path": "papers/base/base-launch-sniping-parameters.txt",
+      "bytes": 14129,
+      "sha256": "8e41653e01beab56c08af5aae7c78423daab561114433b026fdb4a2e875ffc52"
+    },
+    {
+      "path": "papers/base/reference/contract_test_report.json",
+      "bytes": 2105,
+      "sha256": "c894dd7849b7d1e1674e2eff3e5b2b6b366a32a052e4e5d36873fd7bf23eb347"
+    },
+    {
+      "path": "papers/base/reference/evm/package.json",
+      "bytes": 100,
+      "sha256": "e64a014a3e8795372bdf3f9a32a89d1b135ba9755b876f35ecacbe1f875537d5"
+    },
+    {
+      "path": "papers/base/reference/FixedPoolLaunchBuyer.sol",
+      "bytes": 5941,
+      "sha256": "19fd3b1cb0ba30eb961630ca9a0255059f5a14d55a81375be4c2673d1b02840a"
+    },
+    {
+      "path": "papers/base/reference/historical_fork_report.json",
+      "bytes": 143,
+      "sha256": "7729560fe596615ac1d24ac661d1a4546db23381b8d182543dfc3d7ea809aabb"
+    },
+    {
+      "path": "papers/base/reference/MockLaunch.sol",
+      "bytes": 2133,
+      "sha256": "1756b0b08fefdda3a698bce823cb6fd014fcb0f109c21d4ec403aec0b4900dc7"
+    },
+    {
+      "path": "papers/base/reference/README.md",
+      "bytes": 1625,
+      "sha256": "a32078bf5bcbd7cc492dd421d5ba08411d1833c8ed97e6d715f6ef8106fdd0ba"
+    },
+    {
+      "path": "papers/base/reference/rpc_read_probe.json",
+      "bytes": 3015,
+      "sha256": "44521254a03da6698883d9f14767abb97eabaf13284b3ecae6001e7a64691b8d"
+    },
+    {
+      "path": "papers/base/reference/test_contract.cjs",
+      "bytes": 7396,
+      "sha256": "b58ea9dcb08db99d1e6c73c88525d4e5c022c6a03005fbf37ea6936d42a3a1f4"
+    },
+    {
+      "path": "papers/base/reference_profile.json",
+      "bytes": 3901,
+      "sha256": "8cc26dd07de11dc2c7425649b3bfbc66a3e76888d6e4f1429177d456c7c14e40"
+    },
+    {
       "path": "papers/base/sources.json",
       "bytes": 2318,
       "sha256": "b57cee87670066bb4c8b74517408e6c31ca531f64f89825d5506db1e94fafce4"
-    },
-    {
-      "path": "README.md",
-      "bytes": 3724,
-      "sha256": "27327f104ae4350f9fb448bf8340b09a016c6c6156cf91ba2a3b5b1b1b62f6de"
     },
     {
       "path": "papers/solana/case-evidence.json",
@@ -108,6 +163,11 @@
       "path": "papers/solana/sources.json",
       "bytes": 6630,
       "sha256": "eb18ea2cfeb41e9a2285ceb2746f53a04566c9587b6ec511947ccff58c866dd2"
+    },
+    {
+      "path": "README.md",
+      "bytes": 3748,
+      "sha256": "9c46c917400c9c7a8df15561b0e994a16965a6f95caa1660ad35604601f5eb0c"
     }
   ],
   "papers": [
@@ -126,5 +186,20 @@
       "manifest": "papers/solana/manifest.json",
       "empirical_optimum_established": false
     }
-  ]
+  ],
+  "base_editions": [
+    {
+      "name": "简明版",
+      "pages": 4,
+      "references": 13
+    },
+    {
+      "name": "参数与合约版",
+      "pages": 7,
+      "references": 15
+    }
+  ],
+  "local_contract_tests_passed": 14,
+  "historical_success_fork_validated": false,
+  "live_submission_tested": false
 }
