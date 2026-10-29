@@ -1,0 +1,211 @@
+﻿# Solana 新币首买最优竞价策略
+
+已知 mint、排除项目方预留首买：参数决策与可复核案例
+
+执行与案例版 v3.0  |  2026年10月29日
+
+**研究结论先行**
+
+最佳工程方向是：成功路径预构建、最早有效触发、按真实路径竞价、合理 CU 和共享成交保护。不存在已知通用的“0.01 SOL gas + 0.1 SOL tip + 提前 35ms”最优组合。本版给出条件最优规则及完整数值案例，明确区分链上事实、数学推导和未实测配置。
+
+## 1 六个设置的直接答案
+
+| 设置 | 本文推荐规则 | 完整演示档（非实时市场报价） |
+| --- | --- | --- |
+| CU 上限 | 完整成功路径消耗加约 10%，覆盖账户创建、保护与 tip。 | 成功路径 ≤180,000 CU 时，L=200,000。 |
+| gas / 优先费 | 按完整交易 / 可写账户取高竞争报价并检查预算。 | P=0.01 SOL；CU 单价 50,000,000 micro-lamports。 |
+| tip | 按实际路径付款；固定 P、N 和总预算后，先求可支付上限。 | 普通预算例 T=0.1 SOL；50 SOL 档须另预留失败费。 |
+| 提前多久 | 未知创建时间：最早有效信号到达即发；已知 T0 才校准提前量。 | 设计案例为 T0-8ms；第 4 节说明假设及适用边界。 |
+| 频率 | 已确认 50 TPS 额度时，用 40 req/s 起测并预留触发额度。 | 25ms 间隔；定时案例最多 10 笔独立尝试。 |
+| tip 付给谁 | 选发送服务官方指定的 1 个收款账户。 | Sender 用 Sender 账户；直投 Jito 用 getTipAccounts 返回账户。 |
+
+研究边界：目标是规范链上目标池开放后的第一笔成功买入，不是“进入首块”。项目方同交易初始买入、跨交易原子 bundle 或特许提前买入须另行排除；不同地址也不证明背后账户独立。本文不声称已测得首买胜率或市场清算报价。
+
+本文按 2026-10-29 官方资料核对。Alpenglow 的目标终局性、slot 时间与抢买发送提前量不是同一指标；不能由其毫秒数直接生成狙击频率。[11]
+
+## 2 gas 与 CU：先保证成功，再算竞价成本
+
+Solana 的“gas 设置”在 legacy/v0 中通常指 CU 上限 L 与每 CU 单价 c。优先费按请求 CU收费，不按实际消耗 CU 退还。单签名基础费通常为 5,000 lamports；含额外签名或预编译验签时另算。[1][2]
+
+优先费（lamports）= ceil(L × c / 1,000,000)
+
+优先费（SOL）= 优先费（lamports）/ 1,000,000,000
+
+示例 L=200,000、c=50,000,000，则优先费为 10,000,000 lamports，即 0.01 SOL；加单签名基础费共 0.010005 SOL。若只消耗 20,000 CU 就失败，原生费仍按请求预算扣除；同笔 tip 转账回滚。[1][9]
+
+| 步骤 | 具体做法 |
+| --- | --- |
+| 设 CU | 模拟完整成功分支，再加约 10% 余量；示例为 180,000 → 200,000。legacy/v0 单笔最多 1,400,000 CU，账户分支按当前买入接口核对。[2][8] |
+| 取优先费报价 | 用完整序列化交易或实际可写账户估算。可将账户定向 VeryHigh 作为高竞争起测候选；它不是对手最高价，也不是 95% 首买概率。[6] |
+| 检查预算 | 计算总优先费，加入可能落链的独立失败版本；超上限时调整方案，不静默截断后仍称原报价。触发前确定首发档。 |
+
+**不能用“账户不存在”的失败模拟来压低 CU**
+
+目标 mint 未创建时，模拟可能在真正买入前失败；其 unitsConsumed 不能代表成功买单。新增 Memo、tip、账户创建或共享保护后，必须重新覆盖成功路径。CU 紧贴旧历史最小值并不最优。
+
+## 2.1 路径决定哪一部分费用有效
+
+原生调度需要足够的验证者优先费；传统 Jito 冲突竞价考虑 tip/CU；BAM/DBI 文档描述为（优先费 + Jito tip）/ 请求 CU。Sender Max 另有按 tip 优先的服务队列，同时要求原生优先费。[1][3][4][5] 不能把固定 70/30 分成套到全部路径。
+
+v1 通过消息配置设置限额与优先费，旧 ComputeBudget 配置指令不按 legacy/v0 生效。[1][2] BAM/DBI 还涉及白名单和运行状态，历史维护公告不是现在已恢复的证明。[10][13] 本文数值案例选 legacy/v0，发送方须支持所选格式。以太坊常规费用按计费 gasUsed 结算，与此不同。[12]
+
+## 3 tip 付给谁：服务账户，不是任意节点钱包
+
+| 提交方式 | 正确收款与付款方式 |
+| --- | --- |
+| Sender Max | 从 Helius 官方 TIP_ACCOUNTS 选 1 个，附在买单同笔交易。其文档说明处理下游路径 tip，不必向每个通道重复加付。[5] |
+| Jito 直接提交 | 调用官方 getTipAccounts，选返回列表中的 1 个；tip 账户不用 Address Lookup Table。不要用 Sender 收款账户替代 Jito 直投账户。[3] |
+| 普通 RPC / 原生转发 | 通过 CU 单价 / 所用格式的费用配置支付优先费，协议将其结算给出块验证者；无需再向 RPC 节点任意转账。[1] |
+
+Sender 官方账户示例：
+4ACfpUFoaSD9bfPdeu6DBt89gB6ENTeHBXCAi87NhDEE
+Jito 官方账户示例：
+96gYZGLnJYVFmbjzopPSU6QiEV5fGqZNyN9nmNhvrZU5
+
+以上在本研究的官方文档 / getTipAccounts 读回中匹配；不是对当前 leader 身份地址的推测。运行前刷新并验证所属列表，预构建时选定收款人；触发时不要临时等待这次查询。多个兼容入口广播同一签名不会因此多付几笔，但不同消息版本可能分别执行。
+
+## 3.1 最低费用与额度不是热门币清算价
+
+当前 Sender Max 文档要求 tip 至少 0.001 SOL，原生优先费至少 5,000 lamports（0.000005 SOL）。这是准入条件，不是热门首买报价。带项目 API key 的 Sender 标准额度为每区域 50 TPS，免 key 为 1 req/s；应以实际账户额度为准。[5][15]
+
+Jito 默认每 IP、每区域 1 req/s，最低 tip 为 1,000 lamports；默认额度不能按 25ms 连发。若要更高额度，应获得服务允许的额度，不将多个端点或 IP 数量当成规避限流的办法。[3]
+
+**同笔付款的费用边界**
+
+把买入、必要的状态 / 一次性检查和 tip 放在同笔交易：失败时买入和 tip 一起回滚，但原生费仍可能扣除。若一笔成功交易内有两笔 tip 转账，就会支付两笔；单独成功的 tip 交易不会因另一笔买单失败而自动退款。[9]
+
+## 4 提前量与频率：先区分创建触发和定时开放
+
+只知道 mint，创建时间未知：预构建、预热连接，收到最早有效创建信号即发，额外人为等待设为 0ms。事件触发不等下一个 25ms tick；定时重发仅作为短窗补充。早信号的执行承诺、执行结果与最终确认应分别记录，按来源去重，最终排名以规范链为准。[7][13]
+
+可靠链上 T0 已知：先确认门槛是 timestamp、slot 还是状态，并排除 Alpha Vault 等特许提前窗口。[14] 需要有效路径延迟分布 D 与时钟映射误差，而不是把 HTTP RTT 除以 2。普通交易没有等待账户出现或等到 T0 再执行的通用挂单语义；早到可能失败。
+
+## 4.1 为什么“提前 35ms”不是最优常数
+
+为说明问题，设对手第一笔在 T0+R 执行；忽略其他排序因素，自己发送偏移为 s。只有到达时间位于开放后、对手前才有时间竞争资格：
+
+q(s) = P(0 ≤ s + D < R) = F_D(R - s) - F_D(-s)
+
+应在已知分布下最大化这个时间窗口概率，而不是无条件越早越好。它仅是到达资格模型，不是主网首买率；真实竞价、状态分支和对手 R 的分布仍会改变结果。缺少执行端遥测 / 可校准实验时，应使用事件触发，不能假装已经测得 D。
+
+| 纯设计案例：D=8-12ms，R=15ms，时钟误差0 | 模型结果 |
+| --- | --- |
+| T0-35ms 发出 | 到达在 T0-27 至 -23ms，全部过早。 |
+| T0-10ms 发出 | 到达在 T0-2 至 +2ms，一半满足开放后条件。 |
+| T0-8ms 发出 | 到达在 T0 至 +4ms，全部处于竞争窗口。它是本例满足全窗口覆盖的最早发包点。 |
+
+真实环境的起测规则：已测延迟低分位 d05、且 |开盘时钟误差|≤ε 时，可从 s=ε-d05 起测，以减少过早失败；这不保证最先到达。多笔独立预探针可能改进概率，但要连同失败费一起比较。
+
+频率：确认 Sender 50 TPS 可用时，常规 40 req/s（25ms），预留额度给即时信号；Jito 默认档则每秒最多 1 次。已落链失败的同一签名不会因重发变成成功；重新执行需要新消息 / 新签名，并共享一次性保护。
+
+## 5 新增主网案例：两类 tip 收款与交易顺序
+
+案例 mint：2wLyZzkZ5ssghbXaJ3bkf5HpvS1St86AyL3FcyU1pump。该开盘于北京时间 2026-10-29 05:38:23 创建。本次新增检查后续两类付款买单，并用 Solana 官方公共 RPC 与原先 PublicNode 完整区块交叉核对 blockhash、全部签名顺序及相关费用 / CU。[16][17]
+
+| 交易位置¹ | 请求 / 实耗 CU | CU 单价² | 优先费 SOL | 识别出的 tip SOL |
+| --- | --- | --- | --- | --- |
+| 462631103 : 11 | 111,000 / 93,433 | 3,000,000 | 0.000333 | 0.000005 → Sender 账户 |
+| 462631108 : 179 | 250,000 / 86,132 | 1,200,000 | 0.000300 | 0.001000 → Jito 账户 |
+| 462631108 : 181 | 250,000 / 87,723 | 1,200,000 | 0.000300 | 0.001000 → 另一 Jito 账户 |
+
+¹ slot 与区块数组从 0 计数的索引。² 单位为 micro-lamports/CU。tip 仅统计匹配当日官方指定账户的 system transfer；不能单独证明私有路径或不存在其他付款。C1 的 tip 低于当前 Sender Max 门槛，因此不能据此认定它由 Max 提交。[5] 后两笔不是独立开盘实验。
+
+费用复算：较早交易为 ceil(111,000×3,000,000/1,000,000)=333,000 lamports 优先费；加基础费 5,000、tip 5,000，合计 0.000343 SOL。后一类为 300,000 + 5,000 + 1,000,000，合计 0.001305 SOL。均另计买入本金、协议费用和租金。
+
+能支持的结论：tip 收款人随通道支付规则变化；同一类 Jito tip 可付给不同官方账户，不需要寻找当前 leader 的任意钱包。较后交易的识别 tip 是较早者的 200 倍，原生费加识别 tip 约为 3.80 倍。Solana 没有将这些跨时段买单按该总额统一重排的机制。
+
+**不能据此声称“低 tip 更快”或“首买胜出”**
+
+本例未知各笔发送与到达时间、是否进入相同竞价窗口、私有通道及账户共同控制。创建 slot 462631102 的索引 42 是创建者同一账户买入，索引 43 另含两次买入，bundle 归属未知。因此本例是付款与费用案例，不能作为排除项目方后的全历史外部首买基准。
+
+复核链接：买单 C1；买单 C2；买单 C3。保留原始指令、收款人、规范链索引和两 RPC 校验清单；按目标程序 ID 与 IDL 解码，不凭相似日志文字判断。[16][18]
+
+## 6 完整操作案例与“条件最优”的精确含义
+
+假设：已知 mint 与可信 T0；不存在项目方预留首买；legacy/v0 完整成功路径已验证 ≤180,000 CU；已取得 Sender 50 TPS 额度；沿用第 4 节 D=8-12ms、R=15ms、时钟无误差的设计模型。下列不是历史发包记录，也未验证主网胜率。
+
+| 项目 | 本设计案例的设置 |
+| --- | --- |
+| CU / gas | L=200,000；c=50,000,000 micro-lamports/CU；P=0.01 SOL。这是演算档；实际账户报价更高或超预算时先调整，不能将示例假称当前竞争价。 |
+| tip / 收款 | T=0.1 SOL，选第 3 节一个 Sender 官方账户；与买入及共享保护同笔。不额外给全部下游通道付 tip。 |
+| 开始 / 频率 / 结束 | T0-8ms 首发，其后 +17、+42、+67、+92、+117、+142、+167、+192ms，共 9 个计划请求；另预留 1 次事件触发，总独立版本上限 N=10。 |
+| 请求与退出 | base64、skipPreflight=true、maxRetries=0；复用预热连接，检查 blockhash 有效性。收到本方成交或可靠的他人先买信号后停止新发送；已在途版本不能据此撤回。 |
+
+预算：若每笔单签名、10 个独立版本都落链且共享保护确保最多一次成功，原生费上界 10×0.010005=0.10005 SOL；加一次 0.1 SOL tip，共 0.20005 SOL，另计协议费用。本金及可退租金另列。把 tip 改为 50 SOL，需至少 50.10005 SOL 加协议费用预算。
+
+固定 P、N、路径后：Tcap = B - N ×（P + 基础费上限）- 协议费用预留
+
+条件最优规则：如果目标仅最大化首买概率，固定其余参数，服务接受该档且有效排序对 tip 单调不减，那么预算内可取 T=Tcap；它是“固定其他条件后的弱最优”，可能与较低 tip 并列。它没有求解 P 与 T 的联合最优，也不是净利润最优。本例扣除协议预留后的净费用预算为 0.20005，得到 Tcap=0.1；若总 B=50，则为 49.89995 SOL，再减协议费。本例没有将 Pump 协议费设为零。
+
+**真正需要实测的最后一步**
+
+先验证有效路径和到达时机，再在可比开盘中轮换优先费 / tip 档、发送间隔与触发方式，报告样本量、首买率、置信区间及所有失败费。不能从本例假设的时间覆盖率推导主网胜率。没有可靠的首买状态条件时，晚到但成功仍会支付全额 tip；一次性保护只保证自己不重复买。
+
+## 参考文献与复核资料
+
+18 项第一方资料，查阅日期 2026-10-29；原有文档快照与本次复核记录分开保存。
+
+[1] Solana Foundation. Fee Structure
+https://solana.com/docs/core/fees/fee-structure. 原生费用、按请求 CU 收取优先费、v1 费用配置差异。
+
+[2] Solana Foundation. Compute Budget
+https://solana.com/docs/core/fees/compute-budget. CU 上限、成功路径模拟和约 10% 余量。
+
+[3] Jito Labs. Low Latency Transaction Send
+https://docs.jito.wtf/lowlatencytxnsend/. 传统竞价、tip 账户、原子 bundle、限流与失败保护边界。
+
+[4] BAM Team. Introducing: BAM's Direct Bundle Ingest
+https://bam.dev/blog/introducing-bams-direct-bundle-ingest/. 2026-10-13 公告；DBI 的费用/CU 竞价、直接提交与白名单。
+
+[5] Helius. Sender Max
+https://www.helius.dev/docs/sending-transactions/sender-max. 多路径发送、Sender tip、优先费要求和下游 tip 处理。
+
+[6] Helius. Priority Fee API
+https://www.helius.dev/docs/priority-fee-api. 账户定向估算；VeryHigh 是含余量的尾部报价，非成功率。
+
+[7] Helius. Documentation Index: Preconfirmations
+https://www.helius.dev/docs/llms.txt. 区分 Helius 执行后信号与 BAM 承诺执行信号；覆盖和消息去重。
+
+[8] Pump. Bonding Curve Trades V3
+https://github.com/pump-fun/pump-public-docs/blob/main/docs/instructions/TRADE_V3.md. 直接曲线买入接口、账户要求和最高支出/最低输出限制。
+
+[9] Solana Foundation. Transactions
+https://solana.com/docs/core/transactions. 同笔交易指令的原子性及失败仍收费。
+
+[10] BAM Team. BAM Changelog: Sept 23-Oct 9
+https://bam.dev/blog/bam-changelog-sept-23-oct-9/. 2026-10-09 公告；升级维护回退，DBI 与 MPP 暂停安排。
+
+[11] Solana Foundation. Alpenglow
+https://solana.com/upgrades/alpenglow. 当日官网标注主网上线、200ms slot 与终局性目标；流的 bank 标识、跨源合并和承诺级别变化。
+
+[12] Ethereum.org. Gas and Fees
+https://ethereum.org/developers/docs/gas/. 以太坊常规 gas 费按计费 gasUsed 结算，失败也会收费。
+
+[13] BAM Team. Preconfirmations
+https://bam.dev/docs/bam/preconfirmations/. BAM 信号来自执行承诺，非执行结果或最终确认；覆盖范围取决于参与 leader。
+
+[14] Meteora. What is Alpha Vault?
+https://docs.meteora.ag/helper-products/alpha-vault/what-is-alpha-vault. 受保护的公开开盘前买入窗口；公开首买与全历史首买的区别。
+
+[15] Helius. Sender Overview
+https://www.helius.dev/docs/sending-transactions/sender. 带项目 key 的标准每区域 50 TPS，免 key 每秒 1 次；实际额度以账户为准。
+
+[16] Pump. Official Pump IDL
+https://raw.githubusercontent.com/pump-fun/pump-public-docs/main/idl/pump.json. 按程序 ID、指令 discriminator 和账户解析 create_v2、buy 等指令。
+
+[17] Solana Foundation. getBlock RPC
+https://solana.com/docs/rpc/http/getblock. 读取 finalized 完整区块、签名、费用和指令；案例另附原始读数校验清单。
+
+[18] Pump. Coin Creation Accounts
+https://raw.githubusercontent.com/pump-fun/pump-public-docs/main/docs/instructions/COIN_CREATION.md. 创建交易的 user 及账户分支；SDK 可以在同一交易创建并买入，需解析实际指令。
+
+证据说明：创建与付款案例来自规范链读回；发送模型为明示假设的数学例子；配置为待验证工程档。未提交交易、购买服务或测得实际首买胜率。
+
+### 案例完整交易链接
+
+- C1: slot 462631103, index 11
+https://solscan.io/tx/5csBhtysKLzn6QhFWGJ3Wc6YDnGAF5UsKbbsZVCfQyzTnCV1ormMMuxwdJM5c9mHNnM33K84HoRK5kGq4vGcbeF5
+- C2: slot 462631108, index 179
+https://solscan.io/tx/3VYEBAEnVyxT4bxNGcZ3q3Gq9L7NYDrz4QPSJBdaCNpd1ji1WcCidGdJvWWN1yQkVn3EXh5AZis2CoXHWBbFy8rN
+- C3: slot 462631108, index 181
+https://solscan.io/tx/4mrQbGnq5bWJYcqaSCRCMFXRmBiCARp97pUK9PnjBUcwyJkZSbpoAGYwcaqEc2CtX3QMuDWxqzFupQUYhykMfMU3

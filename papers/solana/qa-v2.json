@@ -1,0 +1,86 @@
+{
+  "version": "2.1",
+  "pages": 13,
+  "reference_count": 17,
+  "clickable_links": 21,
+  "content_and_bounds_checks": "passed",
+  "fee_arithmetic_checks": "passed",
+  "case_two_rpc_cross_check": "passed",
+  "source_snapshot_hash_checks": "passed",
+  "mainnet_read_only_case_executed": true,
+  "mainnet_benchmark_executed": false,
+  "empirical_optimum_established": false,
+  "manual_visual_review": "passed; all 13 final rendered pages inspected",
+  "pdf_sha256": "99eccc4247be0239eaafbc693be662679873fdffb112fd2a8644abb0956750cb",
+  "text_sha256": "02c407abbe82f5b65841d84eb8406f97a1bc69ade2e5ca94c7e3ff7aec5e45d5",
+  "markdown_sha256": "a762d2506c8c1848919105defb051e2dca8d13fe8c05d670284fa5e671dd2d28",
+  "page_details": [
+    {
+      "page": 1,
+      "characters": 918,
+      "body_bottom": 636.3595218
+    },
+    {
+      "page": 2,
+      "characters": 1116,
+      "body_bottom": 678.8355472000001
+    },
+    {
+      "page": 3,
+      "characters": 1097,
+      "body_bottom": 717.8355472000001
+    },
+    {
+      "page": 4,
+      "characters": 1015,
+      "body_bottom": 633.3355472000001
+    },
+    {
+      "page": 5,
+      "characters": 925,
+      "body_bottom": 680.2355472
+    },
+    {
+      "page": 6,
+      "characters": 1026,
+      "body_bottom": 556.6595218
+    },
+    {
+      "page": 7,
+      "characters": 1014,
+      "body_bottom": 606.2355472
+    },
+    {
+      "page": 8,
+      "characters": 1123,
+      "body_bottom": 605.7355472
+    },
+    {
+      "page": 9,
+      "characters": 1028,
+      "body_bottom": 640.9355472
+    },
+    {
+      "page": 10,
+      "characters": 1162,
+      "body_bottom": 544.0355472000001
+    },
+    {
+      "page": 11,
+      "characters": 904,
+      "body_bottom": 586.5595218000001
+    },
+    {
+      "page": 12,
+      "characters": 1208,
+      "body_bottom": 433.2300784
+    },
+    {
+      "page": 13,
+      "characters": 1184,
+      "body_bottom": 429.83007840000005
+    }
+  ],
+  "http_source_snapshots": 12,
+  "web_tool_source_read_records": 5
+}
