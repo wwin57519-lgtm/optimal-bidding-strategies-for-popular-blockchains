@@ -1,0 +1,25 @@
+{
+  "files": [
+    {
+      "sha256": "775ead9a7e0eb445eaf43f2d18f19b4372ee9d14a48f8de3c1c6c8afa84f4ffe",
+      "bytes": 4972,
+      "path": "reference_profile.json"
+    },
+    {
+      "sha256": "b08544d04a6517b031700eb1c1bdbe92f8662a5d711d7032a3dd85b6a2901f0e",
+      "bytes": 376355,
+      "path": "robinhood-launch-sniping-parameters.pdf"
+    },
+    {
+      "sha256": "57e5ca25e36a4dcf389b64c475a35e0be71683379e4f4ff3fef5f27e42783ec2",
+      "bytes": 20296,
+      "path": "robinhood-launch-sniping-parameters.txt"
+    }
+  ],
+  "source_pdf_sha256": "b08544d04a6517b031700eb1c1bdbe92f8662a5d711d7032a3dd85b6a2901f0e",
+  "references": 14,
+  "uploaded_on": "2026-11-07",
+  "pages": 9,
+  "title": "Robinhood Chain 开盘狙击：案例与参数版",
+  "paper_revision": "2026-10-29"
+}

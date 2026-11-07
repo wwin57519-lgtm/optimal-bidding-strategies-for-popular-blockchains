@@ -1,0 +1,115 @@
+{
+  "status": "specific_engineering_baseline_not_empirically_optimal",
+  "chain_id": 4663,
+  "paper_date": "2026-10-29",
+  "objective": "earliest acceptable one-time fill under price/tax/capital constraints; measure net PnL separately",
+  "case": {
+    "token": "0xEE6B571F746aBE09d9283Cc00ee521D16093c66C",
+    "curve": "0xf9a2e9F2736050D097A70b94993dd2ae6142f851",
+    "launch_block": 100502985,
+    "launch_tx": "0x96bba10f3cf7d74398998de714be9094ae2587af3316bf702546e610f54f908b",
+    "symbol": "TESTC2"
+  },
+  "buy": {
+    "amount_in_wei": "10000000000000000",
+    "max_input_wei": "10000000000000000",
+    "max_snipe_tax_bps": 100,
+    "slippage_bps": 100,
+    "fixed_case_min_tokens_out": "5799751464583703177702821",
+    "fixed_case_minimum_is_not_a_current_quote": true,
+    "recipient": "USER_FIXED_TREASURY",
+    "native_quote_only": true,
+    "partial_graduation_fills": "reject"
+  },
+  "transaction": {
+    "type": 2,
+    "legacy_gas_price": null,
+    "initial_gas_limit": 600000,
+    "gas_limit_rule": "ceil(1.25 * complete_Nitro_eth_estimateGas / 10000) * 10000",
+    "gas_limit_ceiling": 1200000,
+    "max_priority_fee_per_gas_wei": null,
+    "default_max_priority_fee_per_gas_wei": "0",
+    "priority_fee_rule": "timestamp opening: 0; project enableTrading/add-liquidity Type 2 opening: exact reference maxPriorityFeePerGas in wei",
+    "max_fee_rule": "2 * max(fresh_block_baseFeePerGas, fresh_eth_gasPrice) + selected_maxPriorityFeePerGas",
+    "max_fee_hard_cap_wei": "100000000",
+    "refresh_interval_ms": 1000,
+    "case_base_fee_wei": "20722000",
+    "case_gas_price_wei": "20788000",
+    "case_max_priority_fee_per_gas_wei": "0",
+    "case_max_fee_wei": "41576000"
+  },
+  "project_opening_fee_match": {
+    "enabled_for_project_transaction_mode": true,
+    "reference_actions": [
+      "enableTrading or equivalent trading switch",
+      "addLiquidity or equivalent liquidity activation"
+    ],
+    "reference_must_enable_target_trading": true,
+    "reference_transaction_hash": null,
+    "reference_transaction_type": 2,
+    "source_field": "maxPriorityFeePerGas",
+    "copy_exact_wei": true,
+    "copy_max_fee_per_gas": false,
+    "copy_gas_limit": false,
+    "missing_reference_action": "do not sign in matching mode until verified reference field is available; do not invent zero as a match",
+    "legacy_reference_action": "no maxPriorityFeePerGas field; legacy gasPrice matching requires a separately selected Legacy profile",
+    "cache_reference_before_nonce_allocation": true,
+    "per_transaction_reference_rpc_query": false,
+    "newly_signed_transactions_only": true,
+    "previous_signatures_remain_unchanged": true,
+    "over_existing_fee_cap_action": "stop new signatures; do not clamp priority or claim an exact match",
+    "ordering_advantage_claimed": false,
+    "mainnet_matching_benchmark_performed": false
+  },
+  "scheduler": {
+    "wallet_count": 2,
+    "per_wallet_new_attempt_interval_ms": 200,
+    "initial_phase_offsets_ms": [
+      0,
+      100
+    ],
+    "aggregate_new_tx_limit_per_second": 10,
+    "max_inflight_nonces_per_wallet": 10,
+    "max_unique_signed_transactions_per_wallet": 10,
+    "window_ms": 2000,
+    "max_unique_signed_transactions_per_campaign": 20,
+    "rebroadcast_same_raw_after_ms": 500,
+    "max_additional_rebroadcasts_per_signature": 1,
+    "rpc_submission_global_limit_per_second": 20,
+    "rpc_submission_limit_per_path_per_second": 10,
+    "rebroadcasts_share_submission_budget": true,
+    "stop_on_success_or_expiry": true
+  },
+  "nonce": {
+    "coordinator_count": 1,
+    "persist_before_send": true,
+    "allocation": "locally reserve consecutive nonces before sending; do not await prior receipts",
+    "confirmed_cursor": "advance only from canonical chain evidence",
+    "rpc_nonce_query_per_transaction": false,
+    "normal_background_reconcile_interval_ms": 500,
+    "pause_wallet_on_identified_gap": true,
+    "pending_count_is_not_receipt": true,
+    "reorg_action": "pause and reconcile"
+  },
+  "order_time": {
+    "valid_after": "qualifying fresh chain state timestamp T0",
+    "deadline": "T0 + 3 seconds",
+    "offchain_stop": "2 seconds monotonic clock after trigger",
+    "do_not_extend_on_retry": true
+  },
+  "rpc": {
+    "read_primary": "Alchemy authenticated Robinhood RPC (not benchmarked)",
+    "read_backup": "Chainstack authenticated Robinhood RPC (not benchmarked)",
+    "submit_paths": [
+      "https://sequencer.mainnet.chain.robinhood.com",
+      "same authenticated Alchemy endpoint"
+    ],
+    "same_raw_transaction_both_paths": true,
+    "public_diagnostic": "https://robinhood.rpc.pinax.network",
+    "feed_primary": "wss://feed.mainnet.chain.robinhood.com",
+    "feed_backup": "wss://delayed-feed.mainnet.chain.robinhood.com",
+    "private_rpc_not_private_orderflow": true
+  },
+  "live_submission": false,
+  "contract_deployed_mainnet": false
+}
