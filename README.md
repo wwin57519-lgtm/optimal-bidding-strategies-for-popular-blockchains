@@ -1,8 +1,15 @@
 # 热门区块链的最优竞价策略
 
-研究热门区块链上新池开盘时的交易排序、竞价与首笔成功买入策略。目前收录 Base 与 Solana 论文，覆盖 Uniswap / Aerodrome 新池开盘和 Pump 已知 mint 的首买竞争。
+研究热门区块链上新池开盘时的交易排序、竞价与首笔成功买入策略。目前收录 BSC、Base 和 Solana 论文，覆盖 CT 时间戳开盘、Uniswap / Aerodrome 新池开盘和 Pump 已知 mint 的首买竞争。
 
 ## 阅读论文
+
+### BSC 开盘竞价与首笔买入策略
+
+- [阅读 PDF（10 页）](papers/bsc/bsc-launch-sniping-concise.pdf)
+- [下载可编辑 Word 版](papers/bsc/bsc-launch-sniping-concise.docx)
+
+2026 年 10 月 31 日修订。以 CT 为案例，说明普通广播与私有 MEV bundle 的发送时序、钱包与 nonce 管理、Gas 和 tip 设置，以及两条入口共享的买入锁和首块限制。
 
 ### Base：参数与合约版（7 页）
 
