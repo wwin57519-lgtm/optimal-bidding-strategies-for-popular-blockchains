@@ -1,8 +1,15 @@
 # 热门区块链的最优竞价策略
 
-研究热门区块链上新池开盘时的交易排序、竞价与首笔成功买入策略。目前收录 BSC、Base 和 Solana 论文，覆盖 CT 时间戳开盘、Uniswap / Aerodrome 新池开盘和 Pump 已知 mint 的首买竞争。
+研究热门区块链上新池开盘时的交易排序、竞价与首笔成功买入策略。目前收录 Ethereum、BSC、Base、Solana 和 Robinhood Chain 论文，覆盖时间戳开盘、DEX 新池开盘和 Pump 已知 mint 的首买竞争。
 
 ## 阅读论文
+
+### 以太坊 MEV Bundle 竞价与开盘执行（5 页）
+
+- [阅读 PDF](papers/ethereum/ethereum-mev-bundle-execution-20261107.pdf)
+- [可编辑文字版](papers/ethereum/ethereum-mev-bundle-execution-20261107.txt)
+
+2026 年 11 月 7 日修订。包含三笔历史付款、1 ETH 买入算例、正点开盘的发送时序和低成本提前量试验。接入口往返与 relay 出价时间已有观测，主网最优提前量和首买胜率仍待对照验证。
 
 ### BSC 开盘竞价与首笔买入策略
 

@@ -1,0 +1,149 @@
+以太坊 MEV Bundle 竞价与开盘执行
+主网时序观测、动态报价与低成本验证
+2026 年 11 月 7 日 · Ethereum 主网研究
+
+摘要
+本文研究如何让私有 bundle 赶上首个可交易区块，并在预算内选择报价。结合三笔历史付款与 10 月 29 日实测，六个入口复用连接的往返中位数为 246 至 399 ms，20 个匹配到已交付区块的出价在 slot 起点后 0.349 至 2.635 秒到达 relay。本文给出 1 ETH 买入算例和最多 59 次的低成本试验。工程首发以父状态就绪为触发，验证者收包时刻和开盘首买胜率仍待实测。
+
+关键词  以太坊主网 · MEV · Bundle · 开盘首买 · EIP-1559
+
+1  主网机制与历史证据
+
+Flashbots Alpha 于 2021 年 1 月 6 日开始向参与矿工提供链下 bundle 竞价。以太坊于 2022 年 9 月 15 日完成 Merge，现行 MEV-Boost 路径由 builder 为验证者构块。截至核对日，主网共识配置尚未设置 Gloas 的激活 epoch。本文采用当前主网的 12 秒 slot 与 MEV-Boost 路径。[1–4]
+
+Searcher 用 eth_sendBundle 提交有序的签名交易和执行层目标块高。提交入口可代为分发，builder 模拟并组合候选区块，经 MEV-Boost relay 向当班 proposer 报价。提议者选用区块后签名并发布。链上能查到最终交易及排序，原始包的边界、提交时点和分发名单留在链下。[3,5–6]
+
+图 1  两层竞价的链下路径
+发送者（签名并提交） → 提交入口（按名单分发） → Builder（模拟与构块） → MEV-Boost relay（中继区块报价） → Proposer（选用并发布）
+
+交易可以动态向 block.coinbase 支付 ETH。它指向执行区块的费用接收地址，发送者无须预先知道获胜 builder 或具体地址。历史合约 0xFbB3…795D 检查指定地址的原生 ETH 余额是否低于阈值，然后转交 msg.value。余额条件可在业务执行前成立。应用应直接检查买入结果，并通过链下接口指定包内顺序。[5,7,A–C,D1]
+
+表 1  同一付款合约的历史记录（交易索引从 0 起）
+付款交易 | 区块 / 索引 | 向 coinbase 付款 | 同块业务证据
+0xd7e1a99f… [A] | 18,674,747 / 50 | 70 ETH | 之前 50 笔各用 1 ETH 申购。
+0x9d877e7e… [B] | 19,626,279 / 42 | 0.5 ETH | 之前 7 组领取并卖出，共 66,500 MOBY。
+0x535aaa81… [C] | 19,668,796 / 3 | 1 ETH | 前一笔花 20 WETH 买入约 14,481.55 份 FJO，买入排该销售首块第 3。
+
+付款数值经回执、内部调用和当块费用接收地址核对。三例说明动态付款可与同块业务相邻。交易对之间的私有包关系、报价门槛和首笔优势仍需独立证据。[D1]
+
+2  买入算例与竞价（1 ETH）
+
+算例采用已备好流动性、允许合约调用的标准 V2 WETH/TOKEN 池。TOKEN 为 18 位、无转账税且非重基。报价 100,000 TOKEN，假设完整路径消耗 240,000 Gas。11 月 7 日北京时间 15:47，两个 RPC 返回同一主网父块 26,361,580。按其 gasUsed、gasLimit 和基础费，算得下一块基础费 B = 0.042241812 gwei。费用快照与第 3 节正点开盘例独立。[8,D2]
+
+表 2  买入参数及资金约束
+项目 | 示例设置 | 计算依据或约束
+交易 / 本金 | type 2，chainId = 1，1 ETH | msg.value 等于本金加直接付款 b。
+gas / gasLimit | 300,000 | 假设 240,000 × 1.25，需模拟完整付款路径。
+maxPriorityFeePerGas | 1.00 gwei | 演算固定值。报价比较时调整 b。
+maxFeePerGas | 1.05 gwei | 父块基础费上浮 12.5% 后再加 1 gwei，仍在上限内。
+minOut / 有效性 | 99,000 TOKEN / 目标块 H+1 | 算例取 1% 滑点，另外检查开盘时间和期限。
+直接付款 / 总预算 | 0.010 ETH / 上限 0.020 ETH | 1.03 ETH 总预算含本金、Gas 和 b。
+
+当 B 不超过费用上限时，实际 Gas 单价为 min(maxFeePerGas, B + maxPriorityFeePerGas)。基础费销毁，实际优先费与 b 形成 builder 侧激励。在优先费未被费用上限压缩时，提高 maxFeePerGas 只增加预留余额。gasLimit 依据完整模拟和余量设置。[7–8]
+
+按上表，240,000 Gas 的费用约 0.00025014 ETH，签名前应按 300,000 × 1.05 gwei 预留 0.000315 ETH。b 为 0.010 ETH 时总扣减约 1.01025014 ETH，余额至少 1.010315 ETH。若用满 b 的硬上限，余额至少 1.020315 ETH。算例假设合约已部署，执行前按新父块重算。[8,D2]
+
+套利按期望净收益选择行动 a（报价 b、优先费 q、路由 S、发送时机 t）。p 是业务成功概率，V 是扣除本金和退出侧成本后的价值，C 含实际 Gas，r 是成功条件下预计实收的退款，L 是失败条件下的损失。总支出先按退款前的金额约束。
+
+EV(a) = p(a) × [V(a) - C(a) - b + r(a)] - [1 - p(a)] × L(a)
+
+表 3  教学概率下的有限候选比较（V = 0.040 ETH，r = L = 0）
+付款 b（ETH） | 成交概率 | 首笔概率 | 期望净收益（ETH）
+0.005 | 55% | 25% | 0.019112
+0.010 | 78% | 45% | 0.023205
+0.020 | 90% | 80% | 0.017775
+
+表中概率为假设。该候选集里，收益目标选 0.010 ETH，首笔目标选 0.020 ETH。开盘缺少可信退出估值时，可在支出和 minOut 约束内比较该池首笔有效买入的概率。要实测报价效果，须记录同类机会的全部尝试、成交排序和实收退款。[6,17]
+
+3  开盘时间与延迟观测
+
+主网 slot 每 12 秒开始一次。执行块的时间戳由 slot 决定，漏 slot 时执行层块高不会递增。设开盘 Unix 秒为 O，主网创世时间 G = 1606824023。合约条件为 block.timestamp >= O 时，第一个允许交易的 slot 起点 T 按下式取整。[4,9–10]
+
+T = G + 12 × ceil((O - G) / 12)
+
+北京时间 2026 年 11 月 7 日 12:00:00 开售，按此公式得到 T = 12:00:11，slot 为 15,599,999。这里假定目标 slot 有块且流动性就绪。若开售依赖加池或管理员交易，需验证前置状态，或在可取得前置签名交易时按顺序组成 bundle。[5,D2]
+
+表 4  正点开售的发送时序
+相对 T | 北京时间 | 处理方式
+T - 24 s | 11:59:47 | 预热连接，准备余额、nonce 与交易模板。
+T - 12 s | 11:59:59 | 前一个 slot 开始。用实际到达的父块确定 H+1。
+约 T - 10 s | 约 12:00:01 | 若收父块和处理共用 2 秒，此时完成首发。
+T | 12:00:11 | 目标 slot 起点。以该时间模拟并限制有效性。
+
+父状态与模拟就绪后立即首发。Flashbots 模拟取 stateBlockNumber = H、blockNumber = H+1、timestamp = T，提交指定 H+1 和 minTimestamp = T。漏块或父状态变化后重核块高和时间戳。严格锁定 slot 时，合约也校验目标时间与块高。若假设 12:00:00 就是 T，表中首发改为约 11:59:50。[5,10,17]
+
+表 5  2026-10-29 单机 HTTPS 观测（ms，每入口 3 次新连接、20 次复用）
+接入口 | 新连接中位数 | 复用中位数 / P95 | RPC 响应
+Flashbots | 1,312.37 | 371.49 / 374.20 | 链 ID 0x1
+Titan 全球 | 869.67 | 306.05 / 309.69 | 方法不支持
+Titan 亚太 | 1,252.72 | 245.73 / 247.53 | 方法不支持
+Titan 欧洲 | 2,402.01 | 399.39 / 400.98 | 方法不支持
+BuilderNet 全球 | 941.34 | 247.70 / 248.35 | 鉴权失败
+BuilderNet 亚太 | 957.31 | 250.20 / 252.30 | 鉴权失败
+
+最慢一次新连接耗时 2.614 秒。上表测的是只读请求或错误响应的往返。另将 Flashbots MEV-Boost relay 的 20 个已交付 payload 按 block hash 匹配到 builder 出价，接收时间相对 slot 起点为 +0.349 至 +2.635 秒，中位数 +0.965 秒。样本只覆盖一个 relay，缺少用户发包及验证者收包时刻。若提前 10 秒且命中目标，从发送到本机见块约为 10 秒再加该块相对 T 的提议与传播延迟。后者仍待实测。[11,D3]
+
+4  低成本的提前量试验
+
+先测固定路由、交易类型和费用条件下的目标块收录率，找出时间余量。链上探针用一个无代码、无委托的新 EOA，以 type 2、空 calldata 和空 access list 向自己转 0 ETH。每笔 21,000 Gas，直接付款为 0。11 月 7 日的 32 块快照中，各块 P75 优先费的中位数约 0.0583 gwei。初始试验优先费设 0.1 gwei，maxFeePerGas 上限 0.5 gwei，运行前按目标基础费刷新。[8,D2,D4]
+
+表 6  试验分配与停止条件
+阶段 | 设计 | 尝试上限
+免费诊断 | 校时、测父块到达与签名耗时、复用连接、按目标状态及时间戳做签名交易模拟。 | 0 笔链上交易
+链路校准 | 先测提前 8 秒。若早发也频繁失败，先查覆盖、交易有效性和报价。 | 6
+粗筛 | 提前 8、4、2、1 秒，各 3 次。每轮包含四组，随机顺序。 | 12
+按需细化 | 只补边界和早发对照。例如 4 秒好、2 秒差，补测 3 秒与 8 秒。 | 12
+固定验证 | 冻结选中的时机、费用和路由，在新的目标块上分配 29 次。 | 29
+
+先做最多 18 次校准与粗筛。早发能入块后再做对照。若校准证据指向报价不足，可在冻结方案前把优先费调至最多 0.3 gwei。目标基础费加优先费须在上限内。固定后若改价或改路由，另记一批试验。按当前快照和 0.1 gwei 优先费，18 笔全部入块约 0.000054 ETH，59 笔约 0.000176 ETH。59 × 21,000 × 0.5 gwei = 0.0006195 ETH。[D2,D4]
+
+建议专用钱包备 0.001 ETH，试验预算上限 0.0008 ETH。每次签名前，将已扣费用、未决交易的最坏可执行费用和下一笔费用合并核对。普通自转账本身没有链上过期时间。只走私有包路由，并跟踪已经签发的交易哈希，避免迟到执行干扰下一组的 nonce。[D4]
+
+每个目标块只分配一个提前量。先早发再晚发会污染晚发样本，跨组复用同一签名也需单独标记。记录目标 slot、父块 hash、实际发送、ACK、可用的服务处理时间和首次见块。用目标 slot 的规范链成功回执判定收录，复查重组和迟到执行。实际收录才产生链上 Gas 费用。迟发、传输异常、无覆盖和费用或 nonce 问题保留在总体分母，证据明确时再分层。[5,11,17]
+
+每组 3 次只用来粗筛。若早发和晚发表现接近，保留有更多时间余量的时点。固定验证使用全新样本。假设试验独立且成功概率稳定，n 次全成功的单侧 95% 二项下界为 0.05^(1/n)。10 次全成功时下界为 74.1%。29 次全成功时下界为 90.2%。样本应跨时段与提议者分散，相关性仍会限制推断。提前量之间的差异由随机分组的对照估计。[12]
+
+截至成稿，主网付费对照样本为 0。转账测试回答普通交易能否赶上目标块。开盘首买还需模拟真实买入和付款路径，并用可比开盘样本核验该池买入顺序、成交数量和总成本。[D4]
+
+5  RPC、发送频率与执行合约
+
+读链用一个稳定的 WebSocket 主源监听 newHeads 和池事件，再配一个独立备用源核对 head 和回执。已有同步良好的自建节点可以用作主源。使用供应商时，按父块到达时间、P95 延迟和断线情况选主源。写入使用固定的私有 bundle 路由，并复用连接。[5,13]
+
+表 7  主网提交入口与适配字段
+入口 | 端点 | 适配要点
+Flashbots Bundle Relay | relay.flashbots.net | builders 指定分发名单，replacementUuid 替换。
+BuilderNet 直连 | rpc.buildernet.org | 默认跨区域共享，replacementNonce 控制替换顺序。
+Titan 直连 | ap.rpc.titanbuilder.xyz | 区域端点，replacementSeqNumber 控制替换顺序。
+
+可先固定 Flashbots 分发与 Titan 亚太直连的组合。Flashbots Bundle Relay 已共享订单流给 BuilderNet，直连的价值用延迟、增量覆盖和实收退款比较。最终覆盖还取决于 proposer 是否接入兼容 relay。每个目标块并行首发一次，状态或报价变化才更新。初始限速为每入口间隔至少 250 ms，最多 4 次/秒。传输结果未知时先核对状态，目标仍有效时最多原样重试一次。试验阶段固定重试规则。[5,13–17]
+
+一个交易钱包和独立的请求鉴权密钥即可起步，鉴权密钥无需充值。用本地签名器、单写者 nonce 日志和规范链回执对账。同一机会的路由共用签名交易与 nonce。恢复时查余额、链上 nonce 和未终态记录再继续。10 月 29 日本机 SQLite WAL 同步提交测了 200 次，中位数 0.2942 ms，P95 为 0.4025 ms。测量范围限于本地分配和提交。[D3]
+
+执行合约在一笔交易内校验授权、目标块、开盘与过期时间、订单仅成功一次和付款上限。用受信任的路由买入，比较收币前后余额，达到 minOut 后再向 block.coinbase 付款。用受限的 call 处理合约收款并防重入，付款失败则回滚。已有 OneShotV2Buyer.sol 通过 13 项本地 mock 检查。定时开盘应用需加开盘下界并按真实池、代币和 coinbase 重做模拟。[7,D4]
+
+参考资料与复算索引
+[1] Flashbots Alpha 上线报告 | https://collective.flashbots.net/t/flashbots-transparency-report-january-2021/861
+[2] Ethereum The Merge | https://ethereum.org/roadmap/merge/
+[3] MEV-Boost 区块提议流程 | https://docs.flashbots.net/flashbots-mev-boost/architecture-overview/block-proposal
+[4] Ethereum 主网共识配置 | https://raw.githubusercontent.com/ethereum/consensus-specs/master/configs/mainnet.yaml
+[5] Flashbots Bundle RPC 与模拟 | https://docs.flashbots.net/flashbots-auction/advanced/rpc-endpoint
+[6] Flashbots Bundle Pricing | https://docs.flashbots.net/flashbots-auction/advanced/bundle-pricing
+[7] Flashbots Coinbase Payment | https://docs.flashbots.net/flashbots-auction/advanced/coinbase-payment
+[8] EIP-1559 费用规则 | https://eips.ethereum.org/EIPS/eip-1559
+[9] 主网创世时间 | https://github.com/eth-clients/mainnet/blob/main/README.md
+[10] 共识规范的执行块时间戳校验 | https://ethereum.github.io/consensus-specs/specs/bellatrix/beacon-chain/#process_execution_payload
+[11] MEV-Boost relay 数据接口 | https://github.com/flashbots/relay-specs
+[12] NIST 精确二项区间 | https://www.itl.nist.gov/div898/handbook/prc/section2/prc241.htm
+[13] BuilderNet 订单流与连接复用 | https://buildernet.org/docs/send-orderflow
+[14] BuilderNet API | https://buildernet.org/docs/api
+[15] Titan eth_sendBundle | https://docs.titanbuilder.xyz/api/eth_sendbundle
+[16] Titan 区域端点 | https://docs.titanbuilder.xyz/
+[17] Flashbots 收录故障排查 | https://docs.flashbots.net/flashbots-auction/advanced/troubleshooting
+[A] 70 ETH 历史付款 | https://etherscan.io/tx/0xd7e1a99fb0c778c016fe6a92a2431e19beb8d82b0deaf6968dce5010d71171e1
+[B] 0.5 ETH 历史付款 | https://etherscan.io/tx/0x9d877e7e2808920bd1ed227f64247d76669fdc2c7216bb5392b573bab15fc1d9
+[C] 1 ETH 历史付款 | https://etherscan.io/tx/0x535aaa81881cb9338713f3c7fd7ceedb561793107cf6514af12bf1f068bfb3c1
+
+[D1] 历史回执与 trace 汇总见 research/ethereum_mev_paper_20261027/evidence_checks.json。
+[D2] 11 月 7 日只读主网快照与时间复算见 research/ethereum_bundle_20261107/fee_snapshot.json。
+[D3] 10 月 29 日原始记录见 research 下的 endpoint_latency_20261029/endpoint_latency.json、bundle_timing_20261029/relay_observations.json、nonce_latency_20261029/results.json。
+[D4] 试验底稿见 research/bundle_timing_20261029/低成本分阶段测试方案_v2.txt。合约与测试记录见 research/ethereum_execution_20261029/contract/。
