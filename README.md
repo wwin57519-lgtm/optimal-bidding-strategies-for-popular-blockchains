@@ -53,3 +53,12 @@ LAPTOP 开盘区块中，与加池相同优先费的买入尝试紧随加池，�
 Base 简明版为 4 页、13 条参考资料，参数与合约版为 7 页、15 条参考资料；Solana v3.0 为 8 页、18 条第一方资料。上述 PDF 均已逐页检查排版，文字版与 Markdown 版由对应修订内容生成。Base 文件校验值见根目录 [manifest.json](manifest.json)，Solana 文件校验值见 [独立清单](papers/solana/manifest.json)。
 
 本仓库存放论文、研究配置、参考合约和本地测试，不包含实盘机器人、待广播交易或账户凭据；链上案例中的签名为公开历史交易标识。仓库英文路径对应中文标题“热门区块链的最优竞价策略”。
+
+## Robinhood Chain：开盘狙击案例与参数版（9 页）
+
+- [阅读 PDF](papers/robinhood/robinhood-launch-sniping-parameters.pdf)
+- [可编辑文字版](papers/robinhood/robinhood-launch-sniping-parameters.txt)
+- [机器可读配置](papers/robinhood/reference_profile.json)
+- [SHA-256 校验清单](papers/robinhood/manifest.json)
+
+论文修订于 2026 年 10 月 29 日，上传于 2026 年 11 月 7 日。包含 TESTC2 案例、Gas 与费用上限、钱包与发送频率、nonce 管理、参考合约和 RPC 选型；新增与项目方开关或加流动性交易使用相同 maxPriorityFeePerGas 的配置，并明确同价不提供 FCFS 排序优势。参数为工程起点，未验证主网首买胜率或统计最优。
