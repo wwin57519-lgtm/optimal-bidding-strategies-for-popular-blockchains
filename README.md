@@ -15,6 +15,7 @@
 
 - [阅读 PDF（10 页）](papers/bsc/bsc-launch-sniping-concise.pdf)
 - [下载可编辑 Word 版](papers/bsc/bsc-launch-sniping-concise.docx)
+- [V2 开盘买入参考合约与本地测试](papers/bsc/reference/README.md)
 
 2026 年 10 月 31 日修订。以 CT 为案例，说明普通广播与私有 MEV bundle 的发送时序、钱包与 nonce 管理、Gas 和 tip 设置，以及两条入口共享的买入锁和首块限制。
 
