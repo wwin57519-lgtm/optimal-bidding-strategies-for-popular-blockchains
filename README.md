@@ -1,6 +1,6 @@
 # 热门区块链的最优竞价策略
 
-研究热门区块链上新池开盘时的交易排序、竞价与首笔成功买入策略。目前收录 Ethereum、BSC、Base、Solana 和 Robinhood Chain 论文，覆盖时间戳开盘、DEX 新池开盘和 Pump 已知 mint 的首买竞争。
+研究热门区块链上新池开盘时的交易排序、竞价与首笔成功买入策略。目前收录 Ethereum、BSC、Base、Solana 与 Robinhood Chain 论文，覆盖时间戳开盘、DEX 新池开盘和 Pump 已知 mint 的首买竞争。
 
 ## 阅读论文
 
